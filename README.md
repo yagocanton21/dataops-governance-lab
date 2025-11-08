@@ -1,1 +1,449 @@
-# dataops-governance-lab
+# 🚀 DataOps: Governança e Qualidade de Dados
+
+## 📋 Sobre o Repositório
+
+Este repositório contém o material completo do curso **DataOps, Governança e Qualidade de Dados**, incluindo conceitos teóricos, laboratórios práticos com **PySpark** e **Great Expectations**, e um desafio final abrangente.
+
+### 🎯 Objetivos do Curso
+- Dominar os **conceitos fundamentais** de DataOps: Governança de Dados
+- Implementar **testes de qualidade** automatizados com Great Expectations
+- Aplicar as **6 dimensões da qualidade** de dados na prática
+- Criar **pipelines DataOps** profissionais e escaláveis
+- Desenvolver **soluções completas** de monitoramento e auditoria
+
+## 📁 Estrutura do Repositório
+
+```
+aulaGovernança/
+├── 📚 Conceitos.md                           # Fundamentos teóricos
+├── 🎯 Desafio_Final_DataOps.md              # Desafio prático completo
+├── 📊 datasets/                             # Dados para o desafio
+│   ├── clientes.csv                         # Base de clientes (16 registros)
+│   ├── produtos.csv                         # Catálogo de produtos (20 registros)
+│   ├── vendas.csv                           # Transações de vendas (25 registros)
+│   ├── logistica.csv                        # Dados de entrega (22 registros)
+│   └── README.md                            # Documentação dos datasets
+├── 📓 notebooks/                            # Laboratórios práticos
+│   └── Lab_DataOps_Governanca_Qualidade.ipynb  # Lab com Great Expectations
+├── 🐳 Dockerfile                            # Configuração do ambiente
+├── 🐳 docker-compose.yml                    # Orquestração dos serviços
+└── 📖 README.md                             # Este arquivo
+```
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Apache Spark** (PySpark) - Processamento distribuído de dados
+- **Great Expectations** - Framework profissional de validação de dados
+- **Jupyter Notebook** - Ambiente interativo de desenvolvimento
+- **Docker** - Containerização e isolamento do ambiente
+- **Pandas** - Manipulação de dados em Python
+
+## 🏗️ Arquitetura do Ambiente
+
+### Visão Geral da Arquitetura
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   Jupyter Lab   │    │   Apache Spark   │    │ Great Expect.   │
+│   (Port 8888)   │◄──►│   + Iceberg      │◄──►│  Data Context   │
+│                 │    │   (Port 4040)    │    │   Data Docs     │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │
+                    ┌─────────────────────┐
+                    │   Docker Network    │
+                    │  (172.16.240.0/24)  │
+                    └─────────────────────┘
+                                 │
+                    ┌─────────────────────┐
+                    │    Data Sources     │
+                    │  CSV Files + Spark  │
+                    │   Iceberg Tables    │
+                    └─────────────────────┘
+```
+
+### Arquitetura Docker Compose
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        Host Machine                             │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │              Docker Compose Environment                   │  │
+│  │                                                           │  │
+│  │  ┌─────────────────────────────────────────────────────┐  │  │
+│  │  │           pyspark_aula_container                    │  │  │
+│  │  │                                                     │  │  │
+│  │  │  ┌─────────────────┐  ┌─────────────────┐          │  │  │
+│  │  │  │   Jupyter Lab   │  │  Apache Spark   │          │  │  │
+│  │  │  │   (Port 8888)   │  │  (Port 4040)    │          │  │  │
+│  │  │  │                 │  │  + Iceberg      │          │  │  │
+│  │  │  └─────────────────┘  └─────────────────┘          │  │  │
+│  │  │                                                     │  │  │
+│  │  │  ┌─────────────────┐  ┌─────────────────┐          │  │  │
+│  │  │  │Great Expectations│  │   Data Warehouse│          │  │  │
+│  │  │  │  Data Context   │  │ /opt/warehouse  │          │  │  │
+│  │  │  │   Data Docs     │  │                 │          │  │  │
+│  │  │  └─────────────────┘  └─────────────────┘          │  │  │
+│  │  └─────────────────────────────────────────────────────┘  │  │
+│  │                                                           │  │
+│  │  Network: plataform-network (172.16.240.0/24)            │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│  Volume Mappings:                                               │
+│  ./notebooks  ↔  /home/tavares/work                            │
+│  ./data       ↔  /home/tavares/data                            │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Componentes da Arquitetura
+
+#### 🐳 **Container Layer**
+- **Base Image**: `jupyter/pyspark-notebook`
+- **Custom User**: `tavares` (UID: 1001)
+- **Working Directory**: `/home/tavares/work`
+- **Volumes Mapeados**:
+  - `./notebooks` → `/home/tavares/work`
+  - `./data` → `/home/tavares/data`
+
+#### 🔥 **Apache Spark Configuration**
+- **Versão**: Spark 3.3.0 com Hadoop 3
+- **Executor Memory**: 4GB
+- **Driver Memory**: 4GB
+- **Iceberg Support**: Habilitado para Data Lakehouse
+- **PostgreSQL Driver**: Incluído para conectividade
+
+#### 🎯 **Great Expectations Setup**
+- **Data Context**: Configurado automaticamente
+- **Datasources**: Pandas e Spark
+- **Expectation Suites**: Para cada dataset
+- **Checkpoints**: Automação de validações
+- **Data Docs**: Relatórios HTML profissionais
+
+#### 📊 **Data Architecture**
+```
+Data Flow:
+📄 Raw CSV → 🐍 Pandas/Spark → 🎯 Great Expectations → 📈 Data Docs
+                    ↓
+                🗄️ Warehouse (Iceberg Tables)
+```
+
+### Fluxo de Dados
+
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   Raw CSV   │───►│   PySpark   │───►│Great Expect.│───►│ Data Docs   │
+│   Datasets  │    │  DataFrame  │    │ Validation  │    │  Reports    │
+└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
+                           │
+                           ▼
+                   ┌─────────────┐
+                   │   Iceberg   │
+                   │  Warehouse  │
+                   └─────────────┘
+```
+
+### Portas e Serviços
+
+| Serviço | Porta | Descrição |
+|---------|-------|----------|
+| **Jupyter Notebook** | 8888 | Interface principal de desenvolvimento |
+| **Spark Web UI** | 4040 | Monitoramento de jobs Spark |
+| **Data Docs** | File System | Relatórios Great Expectations |
+
+### Fluxo de Dados
+
+```
+┌─────────────┐───►┌─────────────┐───►┌─────────────┐───►┌─────────────┐
+│   Raw CSV   │    │   PySpark   │    │Great Expect.│    │ Data Docs   │
+│   Datasets  │    │  DataFrame  │    │ Validation  │    │  Reports    │
+└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
+                           │
+                           ▼
+                   ┌─────────────┐
+                   │   Iceberg   │
+                   │  Warehouse  │
+                   └─────────────┘
+```
+
+### Persistência de Dados
+
+```
+Volume Mapping:
+📁 Host                    📦 Container
+./notebooks/          →   /home/tavares/work/
+./data/               →   /home/tavares/data/
+./datasets/           →   Acessível via notebooks
+```
+
+## 🚀 Configuração do Ambiente
+
+### Opção 1: GitHub Codespaces (Recomendado)
+
+1. **Abra o repositório no GitHub Codespaces:**
+   ```bash
+   # Clique em "Code" > "Codespaces" > "Create codespace on main"
+   # Ou use o link direto: https://github.com/seu-usuario/seu-repo/codespaces
+   ```
+
+2. **Execute o ambiente com Docker Compose:**
+   ```bash
+   # No terminal do Codespace
+   docker-compose up -d
+   ```
+
+3. **Acesse o Jupyter Notebook:**
+   - URL: http://localhost:8888
+   - Token: `tavares1234`
+   - Spark UI: http://localhost:4040
+
+4. **Acesse o laboratório:**
+   - Abra `notebooks/Lab_DataOps_Governanca_Qualidade.ipynb`
+   - Execute as células sequencialmente
+
+### Opção 2: Docker (Ambiente Local)
+
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/seu-usuario/aulaGovernanca.git
+   cd aulaGovernanca
+   ```
+
+2. **Construa e execute o ambiente:**
+   ```bash
+   # Construir a imagem Docker
+   docker-compose build
+   
+   # Iniciar os serviços
+   docker-compose up -d
+   ```
+
+3. **Acesse o Jupyter Notebook:**
+   - URL: http://localhost:8888
+   - Token: `tavares1234`
+   - Spark UI: http://localhost:4040
+
+4. **Verifique os volumes:**
+   ```bash
+   # Os notebooks estão em ./notebooks/
+   # Os dados estão em ./data/
+   # Arquivos são persistidos automaticamente
+   ```
+
+### Opção 3: Instalação Local (Python)
+
+1. **Pré-requisitos:**
+   ```bash
+   # Python 3.8+
+   # Java 8 ou 11 (para Spark)
+   # Docker e Docker Compose (recomendado)
+   ```
+
+2. **Clone e execute com Docker:**
+   ```bash
+   git clone https://github.com/seu-usuario/aulaGovernanca.git
+   cd aulaGovernanca
+   docker-compose up -d
+   ```
+
+3. **Ou instale manualmente:**
+   ```bash
+   pip install pyspark==3.3.0 great-expectations pandas jupyter matplotlib
+   export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+   jupyter notebook
+   ```
+
+## 📚 Como Usar Este Repositório
+
+### 1. 📖 Estude os Conceitos
+```bash
+# Leia primeiro os fundamentos teóricos
+cat Conceitos.md
+```
+
+### 2. 🧪 Execute o Laboratório
+```bash
+# Abra o notebook no Jupyter
+notebooks/Lab_DataOps_Governanca_Qualidade.ipynb
+```
+
+### 3. 🎯 Realize o Desafio
+```bash
+# Leia as instruções do desafio
+cat Desafio_Final_DataOps.md
+
+# Use os datasets fornecidos
+ls datasets/
+```
+
+### 4. 📊 Explore os Dados
+```python
+# Exemplo de carregamento dos dados
+import pandas as pd
+
+# Carregar datasets
+clientes = pd.read_csv('datasets/clientes.csv')
+produtos = pd.read_csv('datasets/produtos.csv')
+vendas = pd.read_csv('datasets/vendas.csv')
+logistica = pd.read_csv('datasets/logistica.csv')
+
+print(f"Clientes: {len(clientes)} registros")
+print(f"Produtos: {len(produtos)} registros")
+print(f"Vendas: {len(vendas)} registros")
+print(f"Logística: {len(logistica)} registros")
+```
+
+## 🎓 Roteiro de Aprendizagem
+
+### Módulo 1: Fundamentos (30 min)
+1. 📚 Leia `Conceitos.md` completamente
+2. 🎯 Entenda os 4 pilares da governança
+3. 📊 Memorize as 6 dimensões da qualidade
+
+### Módulo 2: Prática (2 horas)
+1. 🚀 Configure o ambiente (Docker ou Codespaces)
+2. 🧪 Execute o laboratório passo a passo
+3. 🔍 Experimente com Great Expectations
+4. 📈 Analise os Data Docs gerados
+
+### Módulo 3: Desafio (1 semana)
+1. 📋 Leia `Desafio_Final_DataOps.md`
+2. 🔍 Analise os datasets fornecidos
+3. 🏗️ Implemente a solução completa
+4. 📊 Crie relatórios profissionais
+
+## 🔧 Solução de Problemas
+
+### Problema: Spark não inicia
+```bash
+# Verifique o Java
+java -version
+
+# Configure JAVA_HOME
+export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+```
+
+### Problema: Great Expectations não instala
+```bash
+# Use versão específica
+pip install great-expectations==0.18.8
+
+# Ou instale dependências separadamente
+pip install sqlalchemy==1.4.46
+pip install great-expectations
+```
+
+### Problema: Jupyter não acessa
+```bash
+# Verifique se a porta está livre
+netstat -tulpn | grep 8888
+
+# Use porta alternativa
+jupyter notebook --port=8889
+```
+
+### Problema: Docker não funciona
+```bash
+# Verifique se Docker está rodando
+docker --version
+docker-compose --version
+
+# Reconstrua a imagem
+docker-compose down
+docker-compose build --no-cache
+docker-compose up
+```
+
+## 📊 Datasets do Desafio
+
+Os datasets simulam uma empresa de e-commerce (**TechCommerce**) com problemas reais de qualidade:
+
+| Dataset | Registros | Problemas Principais |
+|---------|-----------|---------------------|
+| **clientes.csv** | 16 | Duplicatas, emails inválidos, campos vazios |
+| **produtos.csv** | 20 | Preços negativos, categorias vazias, duplicatas |
+| **vendas.csv** | 25 | Integridade referencial, datas futuras, cálculos incorretos |
+| **logistica.csv** | 22 | Datas inconsistentes, campos vazios, duplicatas |
+
+## 🏆 Critérios de Avaliação
+
+### Laboratório (Formativo)
+- ✅ Execução completa do notebook
+- ✅ Compreensão dos conceitos
+- ✅ Experimentação com Great Expectations
+
+### Desafio (Somativo)
+- 🎯 **40%** - Excelência técnica
+- 📊 **30%** - Aplicação dos conceitos
+- 🔍 **20%** - Solução de problemas
+- 📝 **10%** - Documentação
+
+## 🤝 Contribuição
+
+### Como Contribuir
+1. Fork o repositório
+2. Crie uma branch para sua feature
+3. Faça commit das mudanças
+4. Abra um Pull Request
+
+### Reportar Problemas
+- Use as **Issues** do GitHub
+- Inclua logs de erro completos
+- Descreva o ambiente utilizado
+
+## 📞 Suporte
+
+### Canais de Ajuda
+- 💬 **Discussions**: Para dúvidas gerais
+- 🐛 **Issues**: Para reportar bugs
+- 📧 **Email**: professor@exemplo.com
+
+### Recursos Adicionais
+- 📚 [Documentação Great Expectations](https://docs.greatexpectations.io/)
+- 🔥 [PySpark Documentation](https://spark.apache.org/docs/latest/api/python/)
+- 🐳 [Docker Documentation](https://docs.docker.com/)
+
+## 📄 Licença
+
+Este projeto está licenciado sob a **MIT License** - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+## 🙏 Agradecimentos
+
+- **Apache Spark** pela plataforma de processamento distribuído
+- **Great Expectations** pelo framework de qualidade de dados
+- **Jupyter Project** pelo ambiente interativo
+- **Docker** pela containerização
+
+---
+
+## 🚀 Começe Agora!
+
+### 🐳 Início Rápido com Docker (Recomendado)
+
+```bash
+# 1. Clone o repositório
+git clone https://github.com/seu-usuario/aulaGovernanca.git
+cd aulaGovernanca
+
+# 2. Suba o ambiente
+docker-compose up -d
+
+# 3. Acesse o Jupyter
+# URL: http://localhost:8888
+# Token: tavares1234
+
+# 4. Verifique os serviços
+docker-compose ps
+docker logs pyspark_aula_container
+```
+
+### 📋 Próximos Passos
+1. **Execute o laboratório** - `notebooks/Lab_DataOps_Governanca_Qualidade.ipynb`
+2. **Realize o desafio** - `Desafio_Final_DataOps.md`
+3. **Torne-se um especialista em DataOps!**
+
+**Que a força dos dados esteja com você!** 📊✨
+
+---
+
+*Última atualização: $(date +"%Y-%m-%d")*
