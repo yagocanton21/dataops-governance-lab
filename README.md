@@ -33,11 +33,11 @@ aulaGovernança/
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Apache Spark** (PySpark) - Processamento distribuído de dados
 - **Great Expectations** - Framework profissional de validação de dados
+- **Pandas** - Análise e manipulação de dados em Python
 - **Jupyter Notebook** - Ambiente interativo de desenvolvimento
 - **Docker** - Containerização e isolamento do ambiente
-- **Pandas** - Manipulação de dados em Python
+- **CSV Files** - Datasets de exemplo para laboratórios
 
 ## 🏗️ Arquitetura do Ambiente
 
@@ -76,15 +76,15 @@ aulaGovernança/
 │  │  │           pyspark_aula_container                    │  │  │
 │  │  │                                                     │  │  │
 │  │  │  ┌─────────────────┐  ┌─────────────────┐           │  │  │
-│  │  │  │   Jupyter Lab   │  │  Apache Spark   │           │  │  │
-│  │  │  │   (Port 8888)   │  │  (Port 4040)    │           │  │  │
-│  │  │  │                 │  │  + Iceberg      │           │  │  │
+│  │  │  │   Jupyter Lab   │  │ Great Expectations│         │  │  │
+│  │  │  │   (Port 8888)   │  │  Data Context   │           │  │  │
+│  │  │  │                 │  │   Data Docs     │           │  │  │
 │  │  │  └─────────────────┘  └─────────────────┘           │  │  │
 │  │  │                                                     │  │  │
 │  │  │  ┌─────────────────┐  ┌─────────────────┐           │  │  │
-│  │  │  │Great Expectations│  │   Data Warehouse│          │  │  │
-│  │  │  │  Data Context   │  │ /opt/warehouse  │           │  │  │
-│  │  │  │   Data Docs     │  │                 │           │  │  │
+│  │  │  │     Pandas      │  │   CSV Datasets  │           │  │  │
+│  │  │  │  Data Analysis  │  │ /notebooks/data │           │  │  │
+│  │  │  │                 │  │                 │           │  │  │
 │  │  │  └─────────────────┘  └─────────────────┘           │  │  │
 │  │  └─────────────────────────────────────────────────────┘  │  │
 │  │                                                           │  │
@@ -107,12 +107,11 @@ aulaGovernança/
   - `./notebooks` → `/home/tavares/work`
   - `./data` → `/home/tavares/data`
 
-#### 🔥 **Apache Spark Configuration**
-- **Versão**: Spark 3.3.0 com Hadoop 3
-- **Executor Memory**: 4GB
-- **Driver Memory**: 4GB
-- **Iceberg Support**: Habilitado para Data Lakehouse
-- **PostgreSQL Driver**: Incluído para conectividade
+#### 📊 **Data Processing Stack**
+- **Pandas**: Análise de dados em Python
+- **Great Expectations**: Framework de validação de qualidade
+- **Jupyter**: Ambiente interativo de desenvolvimento
+- **CSV Files**: Datasets de exemplo para laboratórios
 
 #### 🎯 **Great Expectations Setup**
 - **Data Context**: Configurado automaticamente
@@ -124,9 +123,9 @@ aulaGovernança/
 #### 📊 **Data Architecture**
 ```
 Data Flow:
-📄 Raw CSV → 🐍 Pandas/Spark → 🎯 Great Expectations → 📈 Data Docs
+📄 Raw CSV → 🐍 Pandas → 🎯 Great Expectations → 📈 Data Docs
                     ↓
-                🗄️ Warehouse (Iceberg Tables)
+                📊 Quality Reports
 ```
 
 ### Portas e Serviços
@@ -134,21 +133,21 @@ Data Flow:
 | Serviço | Porta | Descrição |
 |---------|-------|----------|
 | **Jupyter Notebook** | 8888 | Interface principal de desenvolvimento |
-| **Spark Web UI** | 4040 | Monitoramento de jobs Spark |
 | **Data Docs** | File System | Relatórios Great Expectations |
+| **CSV Datasets** | File System | Dados de exemplo para laboratórios |
 
 ### Fluxo de Dados
 
 ```
 ┌─────────────┐───►┌─────────────┐───►┌─────────────┐───►┌─────────────┐
-│   Raw CSV   │    │   PySpark   │    │Great Expect.│    │ Data Docs   │
+│   Raw CSV   │    │   Pandas    │    │Great Expect.│    │ Data Docs   │
 │   Datasets  │    │  DataFrame  │    │ Validation  │    │  Reports    │
 └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
                            │
                            ▼
                    ┌─────────────┐
-                   │   Iceberg   │
-                   │  Warehouse  │
+                   │  Cleaned    │
+                   │   Dataset   │
                    └─────────────┘
 ```
 
@@ -250,13 +249,13 @@ Volume Mapping:
 
 ## 🔧 Solução de Problemas
 
-### Problema: Spark não inicia
+### Problema: Jupyter não acessa
 ```bash
-# Verifique o Java
-java -version
+# Verifique se a porta está livre
+netstat -tulpn | grep 8888
 
-# Configure JAVA_HOME
-export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+# Use porta alternativa
+jupyter notebook --port=8889
 ```
 
 ### Problema: Great Expectations não funciona
@@ -308,10 +307,10 @@ Notebook introdutório que demonstra como:
 
 ### 🧪 **Lab_DataOps_Governanca_Qualidade.ipynb** - Laboratório Principal
 Laboratório completo com Great Expectations para:
-- Implementar validações de qualidade
+- Implementar validações de qualidade com pandas
 - Aplicar as 6 dimensões da qualidade
 - Criar expectativas automatizadas
-- Gerar relatórios profissionais
+- Pipeline DataOps completo: validação → correção → re-validação
 
 **Ideal para**: Aprendizado prático de DataOps e Great Expectations.
 
@@ -323,15 +322,6 @@ Notebook de diagnóstico para:
 - Executar testes básicos
 
 **Ideal para**: Diagnóstico de problemas e verificação do ambiente.
-
-### 🔧 **Lab_DataOps_Governanca_Qualidade_Fixed.ipynb** - Versão Corrigida
-Versão corrigida do laboratório principal que:
-- Evita erros de serialização do PySpark
-- Usa apenas pandas para compatibilidade
-- Implementa todas as 6 dimensões da qualidade
-- Funciona em qualquer ambiente Docker
-
-**Ideal para**: Uso quando houver problemas com a versão original.
 
 ## 📊 Datasets do Desafio
 

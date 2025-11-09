@@ -1,0 +1,11 @@
+id_cliente,nome,email,telefone,data_cadastro,status,idade,estado
+1,João Silva,joao@email.com,11999887766,2023-01-15,Ativo,25,SP
+2,Maria Santos,maria.santos@gmail.com,11888776655,2023-02-20,Ativo,32,RJ
+3,Pedro,pedro@invalid,119999,2023-03-10,Inativo,150,MG
+4,Ana Costa,ana@email.com,11777665544,2023-04-05,Ativo,28,SP
+1,João Silva,joao@email.com,11999887766,2023-01-15,Ativo,25,SP
+5,,carlos@email.com,11666554433,2023-05-12,Pendente,,RS
+6,Lucia Oliveira,lucia@email.com,11555443322,2022-12-01,Ativo,45,BA
+7,Roberto Lima,roberto@email.com,11444332211,2023-06-18,Cancelado,38,PR
+8,Fernanda,,11333221100,2023-07-22,Ativo,29,SC
+9,Marcos Pereira,marcos@email.com,11222110099,2023-08-30,Ativo,-5,GO
