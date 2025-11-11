@@ -1,0 +1,21 @@
+id_produto,nome_produto,categoria,preco,estoque,data_criacao,ativo
+101,Smartphone XYZ,Eletrônicos,899.99,50,2023-01-01,True
+102,Notebook ABC,,1299.99,25,2023-01-05,True
+103,Mouse Gamer,Informática,-29.99,100,2023-01-10,True
+104,Teclado Mecânico,Informática,199.99,0,2023-01-15,False
+105,Smartphone XYZ,Eletrônicos,899.99,50,2023-01-01,True
+106,"Monitor 24""",Informática,599.99,30,2023-01-20,True
+107,Headset Gamer,Informática,149.99,75,2023-01-25,True
+108,Webcam HD,Informática,89.99,40,2023-02-01,True
+109,SSD 500GB,Informática,299.99,60,2023-02-05,True
+110,Placa de Vídeo,Informática,1599.99,15,2023-02-10,True
+111,Processador Intel,Informática,899.99,20,2023-02-15,True
+112,Memória RAM 16GB,Informática,399.99,80,2023-02-20,True
+113,Fonte 600W,Informática,249.99,35,2023-02-25,True
+114,Gabinete Gamer,Informática,199.99,25,2023-03-01,True
+115,Cooler CPU,Informática,79.99,90,2023-03-05,True
+116,Mousepad,Informática,29.99,150,2023-03-10,True
+117,Cabo HDMI,Informática,19.99,200,2023-03-15,True
+118,Adaptador USB,Informática,39.99,120,2023-03-20,True
+119,Hub USB,Informática,59.99,85,2023-03-25,True
+120,Carregador Wireless,Eletrônicos,129.99,45,2023-04-01,True

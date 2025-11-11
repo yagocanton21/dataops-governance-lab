@@ -1,0 +1,16 @@
+id_cliente,nome,email,telefone,data_nascimento,cidade,estado,data_cadastro
+1,João Silva,joao@email.com,11999887766,1985-03-15,São Paulo,SP,2023-01-10
+2,Maria Santos,,11888776655,1990-07-22,Rio de Janeiro,RJ,2023-01-15
+3,Pedro,pedro@invalid,119999,2000-12-01,Belo Horizonte,MG,2023-02-01
+4,Ana,ana@email.com,11777665544,1995-05-30,São Paulo,SP,2023-02-10
+5,Ana Costa,ana.costa@gmail.com,11966554433,1988-11-10,Curitiba,PR,2023-02-15
+6,Carlos Lima,carlos@hotmail.com,11955443322,1992-08-25,Porto Alegre,RS,2023-03-01
+7,Fernanda Souza,fernanda@yahoo.com,11944332211,1987-04-18,Salvador,BA,2023-03-05
+8,Ricardo Alves,ricardo@empresa.com.br,11933221100,1993-09-12,Recife,PE,2023-03-10
+9,Juliana Pereira,juliana@outlook.com,11922110099,1991-06-07,Fortaleza,CE,2023-03-15
+10,Marcos Oliveira,marcos@gmail.com,11911009988,1989-12-03,Brasília,DF,2023-04-01
+11,Patrícia Rocha,patricia@email.com,11900998877,1994-02-28,Goiânia,GO,2023-04-05
+12,Eduardo Santos,eduardo@teste.com,11899887766,1986-10-14,Belém,PA,2023-04-10
+13,Camila Ferreira,camila@valid.com,11888776655,1996-01-20,Manaus,AM,2023-04-15
+14,Roberto Silva,roberto@empresa.com,11877665544,1984-07-09,São Luís,MA,2023-05-01
+15,Luciana Martins,luciana@email.com,11866554433,1997-03-05,Natal,RN,2023-05-05
